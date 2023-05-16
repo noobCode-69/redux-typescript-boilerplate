@@ -2,7 +2,7 @@
 
 1. Redux Store is where all you data i.e state resides.
 2. Inside Redux Store is you Reducers , each reducer handle a bunch of states. i.e each reducer handle one or more states
-3. For each action we define type for that action. In single file define the type of all the actions. Here you can see , I have 4 actions (will have to add more) , and we are giving each of them a type. Don’t confuse,   it’s not the ts definition of Actions. It’s the type of Action or you can just say  a specific “id” of a Action . **“**Each action have two properties : type and payload**”**
+3. For each action we define type for that action. In single file define the type of all the actions. Here you can see , I have 4 actions (will have to add more) , and we are giving each of them a type. Don’t confuse,   it’s not the ts definition of Actions. It’s the type of Action or you can just say  a specific “id” of a Action . Each action have two properties : type and payload
     
     ```jsx
     export enum ActionTypes {
@@ -115,4 +115,4 @@
     ```
     
 
-10. This is more or less all the files that you are going to setup the redux. Now you should know how to use it.
+10. This is more or less all the files that you are going need to setup the redux. Now you should know how to use it.
