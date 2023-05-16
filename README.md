@@ -1,4 +1,4 @@
-
+# Redux + Typescript
 
 1. Redux Store is where all you data i.e state resides.
 2. Inside Redux Store is you Reducers , each reducer handle a bunch of states. i.e each reducer handle one or more states
