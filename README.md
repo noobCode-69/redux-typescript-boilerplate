@@ -1,4 +1,4 @@
-# Redux + Typescript
+# 🤮 Redux + Typescript
 
 # Let’s Talk about Redux.
 
