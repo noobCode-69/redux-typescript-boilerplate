@@ -1,4 +1,4 @@
-# 🤮 Redux + Typescript
+# Redux + Typescript
 
 # Let’s Talk about Redux.
 
@@ -197,13 +197,52 @@ import { actionCreators } from "../state";
 // actionCreators is all my action creator function
 export const useActions = () => {
   const dispatch = useDispatch();
-  return bindActionCreators(actionCreators, dispatch);
+  return useMemo(() => {
+    return bindActionCreators(actionCreators, dispatch);
+  }, [dispatch]);
 };
-
-// now we can use it as not hook
+// we are using useMemo here because bindActionCreators() return a new 
+// reference which cause issues when we are using the action-creators extracted
+// from it as a dependency inside useEffect, it's a mess
+// now we can use it as normal hook
 ```
 
 ```jsx
 const {udpdateCell} = useActions();
 updateCell(args)
+```
+
+# Let’s now talk about Redux Thunk (async code)
+
+1. In thunk since we are dealing with async code , we have to manually dispatch action when the promise is resolve , it’s the only difference.
+
+```jsx
+// This action creator handles async code
+// normally action creator return an action
+// but this action creator return a function (async)
+export const createBundle = (cellId: string, input: string) => {
+  return async (dispatch: Dispatch<Action>) => {
+		// manually dispatch an action that bundling is started
+    dispatch({
+      type: ActionType.BUNDLE_START,
+      payload: {
+        cellId: cellId,
+      },
+    });
+		// this is the start of async code , it can be any api call
+    const result = await bundle(input);
+		// when bundling is code, then again dispatch another action 
+		// things will be clear once we know how to use it in react component
+    dispatch({
+      type: ActionType.BUNDLE_COMPLETE,
+      payload: {
+        cellId: cellId,
+        bundle: {
+          code: result.code,
+          err: result.error,
+        },
+      },
+    });
+  };
+};
 ```
