@@ -221,7 +221,7 @@ updateCell(args)
 // normally action creator return an action
 // but this action creator return a function (async)
 export const createBundle = (cellId: string, input: string) => {
-  return async (dispatch: Dispatch<Action>) => {
+  return async (dispatch: Dispatch<Action> , getState : () => RootState) => {
 		// manually dispatch an action that bundling is started
     dispatch({
       type: ActionType.BUNDLE_START,
@@ -243,6 +243,52 @@ export const createBundle = (cellId: string, input: string) => {
         },
       },
     });
+  };
+};
+
+```
+
+```jsx
+// If you want to use thunk inside a component do it like normal action-creator
+const {createBundle} = useActions()
+// now call it
+createBundle(args)
+// thunk will manually call the innner function
+
+```
+
+# Middleware
+
+1. Middleware are little but confusion 
+2. Middleware is a function that returns a function that also returns a function
+3. The outermost function is called with dispatch and getState
+4. The inner function is called with an argument “next” which is a function that returns nothing  and      take an action as a argument
+5. The innermost function take an action argument 
+
+```jsx
+export const persistMiddleware = ({
+  dispatch,
+  getState,
+}: {
+  dispatch: Dispatch<Action>;
+  getState: () => RootState;
+}) => {
+  return (next: (action: Action) => void) => {
+    return (action: Action) => {
+      //   we want to forward the action that we recieve
+      next(action);
+      if (
+        [
+          ActionType.MOVE_CELL,
+          ActionType.UPDATE_CELL,
+          ActionType.INSERT_CELL_AFTER,
+          ActionType.DELETE_CELL,
+        ].includes(action.type)
+      ) {
+				// Inside a middle you have to involve a async action like this
+        saveCells()(dispatch, getState);
+      }
+    };
   };
 };
 ```
